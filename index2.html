@@ -51,17 +51,27 @@
     <input type="password" id="password" name="password" placeholder="Enter your password"><br><br>
     <button id="login" onclick="login()">Login</button> 
 
-    <p id="title">Hello World!</p> -->
-    <button id="toggle" onclick="toggle()">toggle</button>
-    
-    <script>
+    <p id="title">Hello World!</p> 
+    <button id="toggle" onclick="toggle()">toggle</button> -->
+    <p id="msg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ex laudantium in voluptas numquam et, repudiandae sed quam earum est vel, odit consequatur! Placeat natus fugit ullam doloremque! Et, deserunt.</p>
+    <button id="hide">Hide</button>
+    <button id="show">Show</button>
 
-        var toggle = ()=>{
-           var colors=["red","blue","green","yellow","pink","purple","orange"];
-            var index=Math.floor(Math.random()*colors.length);
-            document.querySelector('body').style.backgroundColor=colors[index];
-            
-        }
+    <script>
+        document.getElementById("msg").style.fontSize="30px";
+        document.getElementById("hide").addEventListener("click",()=>{
+            document.getElementById("msg").style.display="none";
+        });
+
+        document.getElementById("show").addEventListener("click",()=>{
+            document.getElementById("msg").style.display="block";
+        });
+        //var toggle = ()=>{
+        //   var colors=["red","blue","green","yellow","pink","purple","orange"];
+        //    var index=Math.floor(Math.random()*colors.length);
+        //    document.querySelector('body').style.backgroundColor=colors[index];
+
+        //}
 
         // var buttonClicked = ()=>{
         //    var title = document.getElementById('title');
