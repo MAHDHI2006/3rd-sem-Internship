@@ -7,7 +7,7 @@
 // cons= c=10;  //Block scope
 
 //Example of Data Types in JavaScript
-
+/*
 var p=20;//number
 var q="Hello";//string
 var bool=true;//boolean
@@ -316,7 +316,7 @@ var demo = () => {
 }
 
 demo();
-
+*/
 // MAP
 var arr = [1,2,3,4,5];
 var double = arr.map(num=>num*2);
@@ -329,3 +329,27 @@ console.log(even)
 // Reducer
 var total = arr.reduce((sum,num)=>(sum+num),0);
 console.log(total)
+
+var evenCount = arr.map(num=>num**3).filter(num=>num%2===0).reduce((sum,num)=>(sum+1),0);
+console.log(evenCount)
+
+var student = [
+    {name:"MZ",
+    mark:95,},
+    {name:"LMZ",
+    mark:85,},
+    {name:"ZM",
+    mark:98,}
+]
+var studentMark = student.filter(s=>s.mark>88);
+console.log(studentMark)
+
+var studentMark = student.map(s=>s.name);
+console.log(studentMark)
+
+//reduce
+var totalmarks=students.reduce((sum,student)=>sum+student.marks,0);
+console.log(totalmarks);
+
+var avg=totalmarks/students.length;
+console.log(avg);
