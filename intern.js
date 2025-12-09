@@ -317,6 +317,7 @@ var demo = () => {
 
 demo();
 */
+/*      
 // MAP
 var arr = [1,2,3,4,5];
 var double = arr.map(num=>num*2);
@@ -353,3 +354,52 @@ console.log(totalmarks);
 
 var avg=totalmarks/students.length;
 console.log(avg);
+
+//promises
+const promise = new Promise((resolve,reject)=>{
+    var a=true;
+    if(a){
+        resolve("Success");
+    }else{
+        reject("Failed");
+    }
+});
+promise.then((msg)=>
+    console.log("Resolved:",msg)).catch((err)=>console.log(err))
+
+// promises with setTimeout
+const asyncTask = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        resolve("Completed");
+    },3000);
+});
+promise.then((msg)=>
+    console.log("Resolved:",msg)).catch((err)=>console.log(err))
+*/
+/*
+const getData =()=>{
+    return fetch('https://jsonplaceholder.typicode.com/posts')
+}
+getData().then(response=>response.json())
+.then(data=>console.log(data))
+.catch(err=>console.log(err));
+*/
+/*
+const getData =async()=>{
+    var response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    var data = await response.json();
+    console.log(data);
+}
+getData();
+*/
+
+const getData = async () => {
+    try {
+        var response = await fetch('https://jsonplaceholder.typicode.com/posts');
+        var data = await response.json();
+        console.log(data);
+    } catch (err) {
+        console.log(err);
+    }   
+}
+getData();

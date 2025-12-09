@@ -43,22 +43,44 @@
         <label for="city">City:</label><br>
         <input type="text" id="city" name="city" placeholder="Enter your city"><br><br>
         <button id="submit" onclick="submitted()">Submit</button> 
-    </form> -->
+    </form> 
 
     <label for="email">Email:</label><br>
     <input type="email" id="email" name="email" placeholder="Enter your email"><br><br>
     <label for="password">Password:</label><br>
     <input type="password" id="password" name="password" placeholder="Enter your password"><br><br>
-    <button id="login" onclick="login()">Login</button>
-    
+    <button id="login" onclick="login()">Login</button> 
 
+    <p id="title">Hello World!</p> -->
+    <button id="toggle" onclick="toggle()">toggle</button>
+    
     <script>
-        
-        var login = ()=>{
-            var email=document.getElementById("email").value;
-            var password=document.getElementById("password").value;
+
+        var toggle = ()=>{
+           var colors=["red","blue","green","yellow","pink","purple","orange"];
+            var index=Math.floor(Math.random()*colors.length);
+            document.querySelector('body').style.backgroundColor=colors[index];
             
         }
+
+        // var buttonClicked = ()=>{
+        //    var title = document.getElementById('title');
+        //    var result = title.innerText==="Hello World!" ? "Hello Universe!" : "Hello World!";
+        //    title.innerText = result;
+        //}
+
+
+       // var toggle = ()=>{
+       //    var color=["red","blue","green","yellow","pink","purple","orange"];
+       //     var index=Math.floor(Math.random()*color.length);
+       //     document.querySelector('body').style.backgroundColor=color[index];
+       // }
+        
+        //var login = ()=>{
+        //   var email=document.getElementById("email").value;
+        //    var password=document.getElementById("password").value;
+
+        //}
         //var submitted = ()=>{
             
         //   alert("Form Submitted Successfully 🎶");
