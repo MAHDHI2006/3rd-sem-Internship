@@ -1,22 +1,22 @@
 import ClassComponent from "./components/ClassComponent.jsx";
 import Navbar from "./functionalComponents/Navbar.jsx";
-import './App.css';
+import Home from "./functionalComponents/Home.jsx";
+import About from "./functionalComponents/About.jsx";
+import Contact from "./functionalComponents/Contact.jsx";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./css/App.css";
+
 function App() {
-  const h1style = {
-    color: 'blue',
-    textAlign: 'center',
-    marginTop: '50px',
-  };
   return (
-    <header>
+    <BrowserRouter>
       <Navbar />
-      <div>
-        <h1 style={h1style}>Welcome to JSX</h1>
-        <h2 className="h2">This is simple React component</h2>
-        <ClassComponent />
-        <img src="vite.svg" alt="React Logo" style={{marginLeft : "100px", width:"200px",height:"200px"}} />
-      </div>
-    </header>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+      
+    </BrowserRouter>
   )
 }
 

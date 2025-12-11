@@ -8,12 +8,19 @@ function App() {
   };
   return (
         <header>
-          <button className="signup-btn">Sign Up</button>
           <div>
-            <h1>GOOGLE</h1>
-            <div id="search-bar">
-              <input type="text" placeholder="Search URL" />
-              <button>Search</button>
+            <h1>Login page</h1>
+            <div id="Box">
+              <input type="text" placeholder="Username or Email" />
+            </div>
+            <p></p>
+            <div id="Box">
+             <input type="password" placeholder="Password" />
+            </div>
+            <p></p>
+            <div>
+              <button>Login</button>
+              <p>IF YOU DON'T HAVE ACCOUT REGISTER</p><button>Register</button>
             </div>
           </div>
         </header>
