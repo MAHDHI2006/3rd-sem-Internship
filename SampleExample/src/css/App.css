@@ -40,3 +40,65 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Layout for the sample login page */
+.app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: #fafafa;
+}
+
+main {
+  flex: 1;
+  padding: 48px 64px;
+}
+
+.login-page {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.login-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 48px;
+  color: #333;
+  margin-bottom: 24px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-label {
+  font-size: 20px;
+  color: #333;
+}
+
+.form-input {
+  width: 420px;
+  max-width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #cfcfcf;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.submit-btn {
+  width: 140px;
+  background: #ff6b2d;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background: #ff7f49;
+}

@@ -1,57 +1,61 @@
-nav{
+/* Top navigation styled to match provided design */
+.site-header {
+    width: 100%;
+}
+.topbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    background-color: #333;
-    color: white;
+    background: #ff6b2d; /* warm orange */
+    padding: 16px 24px;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.06);
+}
+.nav-list {
+    list-style: none;
+    display: flex;
+    gap: 28px;
+    margin: 0;
+    padding: 0;
+}
+.nav-item a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 6px 10px;
+}
+.nav-item a:hover {
+    opacity: 0.95;
+}
+.nav-item.active a {
+    background: rgba(255,255,255,0.12);
+    border-radius: 4px;
+}
+.nav-right .logout {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 3px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
+}
+.nav-right .logout:hover {
+    background: rgba(255,255,255,0.36);
+}
 
-    .dropdown {
-        position: relative;
-        display: inline-block;
+.login-btn {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.login-btn:hover { background: rgba(255,255,255,0.36) }
 
-        .dropbtn {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-
-            a {
-                color: black;
-                padding: 12px 16px;
-                text-decoration: none;
-                display: block;
-
-                &:hover {
-                    background-color: #f1f1f1;
-                }
-            }
-        }
-    } 
-
-    .dropdown
-    
-    &:hover .dropdown-content {
-            display: block;
-    }
-    .dropdown-link {
-        text-decoration: none;
-        color: white;
-        padding: 10px;
-
-        &:hover {
-            background-color: #575757;
-        }
-    }
+@media (max-width: 600px) {
+    .nav-list { gap: 12px; font-size: 16px }
+    .nav-item a { font-size: 16px }
 }
