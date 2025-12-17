@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import './css/App.css'
 import Navbar from './components/functionalComponents/Navbar'
 import Login from './Login'
-
 import Home from './pages/Home'
 import About from './pages/About'
 import Learning from './pages/Learning'
@@ -27,6 +26,11 @@ function App() {
       </main>
     </div>
   )
+
+const connectDB = require("./db");
+
+connectDB();
+
 }
 
 export default App
