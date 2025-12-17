@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node server.cjs"
   },
   "dependencies": {
     "mongodb": "^7.0.0",
@@ -29,9 +30,6 @@
   },
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
   "main": "entry.js",
-  "scripts": {
-    "start": "node server.cjs"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC"
