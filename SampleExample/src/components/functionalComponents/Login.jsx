@@ -1,7 +1,7 @@
 import React from 'react'
-import './css/App.css'
+import '../../css/App.css'
 
-const Login = () => {
+const Login = ({ onNavigate = () => {} }) => {
   const handleLogin = async (event) => {
     event.preventDefault()
     const email = event.target.email.value
@@ -22,6 +22,9 @@ const Login = () => {
 
         <button className="submit-btn" type="submit">Login</button>
       </form>
+      <p style={{ marginTop: 16 }}>
+        Create an account? <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('signup'); }}>Signup</a>
+      </p>
     </section>
   )
 }
