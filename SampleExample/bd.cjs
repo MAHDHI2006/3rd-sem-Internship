@@ -3,13 +3,19 @@ const { MongoClient } = require("mongodb");
 
 const uri = process.env.MONGODB_URI;
 
+let client;
 if (!uri) {
-  console.error('Missing MONGODB_URI in environment. Please set it in a .env file');
+    console.warn('Missing MONGODB_URI in environment. Database connection will be skipped.');
+} else {
+    client = new MongoClient(uri);
 }
 
-const client = new MongoClient(uri);
-
 async function connectDB() {
+    if (!uri) {
+        // No URI provided — do not attempt to connect. This allows the server to run without a DB.
+        return;
+    }
+
     try {
         await client.connect();
         console.log("✅ MongoDB Atlas Connected");
