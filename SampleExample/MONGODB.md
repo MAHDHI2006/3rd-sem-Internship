@@ -10,7 +10,7 @@ Steps to connect:
 Example `.env` content:
 
 ```
-MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.example.mongodb.net/mydatabase?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://MAHDHI-Z:MAHDHI-Z@cluster0.example.mongodb.net/mydatabase?retryWrites=true&w=majority
 ```
 
 `bd.js` loads environment variables via `dotenv`. Ensure `dotenv` is installed if you run server-side scripts:
