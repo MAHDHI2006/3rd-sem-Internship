@@ -1,8 +1,10 @@
 const express = require("express");
 const mbd = require("mongoose");
 const Signup = require("./src/models/SigupSchema");
+const bcrypt = require("bcryptjs");
 const app = express();
 const PORT = 3000;
+
 
 app.use(express.json());
 
@@ -41,10 +43,16 @@ mdb
       const user = await Signup.findOne({ email: email });
       console.log(existingUser);
       if (!user) {
+        const payload = {
+          email: !user.email,
+          username: !user.username,
+        };
         return res.status(404).json({ message: "User not found", isLoggedIn: false });
       }
       const isValidPassword = user.password === Password;
       if (isValidPassword) {
+      const token = wt.sign(payload,process.env.SECRET_KEY,)
+      console.log(token);
         return res.status(200).json({ message: "login succesfully", isLoggedIn: true });
       }
       return res.status(401).json({ message: "Invalid password", isLoggedIn: false });
