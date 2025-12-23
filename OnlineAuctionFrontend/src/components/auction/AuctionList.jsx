@@ -35,7 +35,7 @@ const AuctionList = () => {
         auctionId,
         bidAmount: parseFloat(bidAmount)
       }, {
-        headers: { Authorization: token }
+        headers: { Authorization: `Bearer ${token}` }
       });
       
       alert('Bid placed successfully!');
@@ -55,24 +55,26 @@ const AuctionList = () => {
         <p>No active auctions found.</p>
       ) : (
         auctions.map(auction => (
-          <div key={auction._id} className="auction-card">
+          <div key={auction.id} className="auction-card">
             <h3>{auction.title}</h3>
             <p>{auction.description}</p>
             <div className="auction-details">
               <p><strong>Seller:</strong> {auction.seller}</p>
+              <p><strong>Starting Price:</strong> ${auction.startingPrice}</p>
               <p><strong>Current Price:</strong> ${auction.currentPrice}</p>
               <p><strong>Total Bids:</strong> {auction.bids.length}</p>
+              <p><strong>Ends:</strong> {new Date(auction.endTime).toLocaleString()}</p>
             </div>
             <div className="bid-section">
               <input
                 type="number"
                 placeholder="Enter bid amount"
-                value={bidAmounts[auction._id] || ''}
-                onChange={(e) => setBidAmounts({...bidAmounts, [auction._id]: e.target.value})}
+                value={bidAmounts[auction.id] || ''}
+                onChange={(e) => setBidAmounts({...bidAmounts, [auction.id]: e.target.value})}
                 min={auction.currentPrice + 0.01}
                 step="0.01"
               />
-              <button onClick={() => placeBid(auction._id)}>
+              <button onClick={() => placeBid(auction.id)}>
                 Place Bid
               </button>
             </div>

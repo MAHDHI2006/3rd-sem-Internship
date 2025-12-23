@@ -13,20 +13,30 @@ app.use(express.json());
 app.use(cors())
 dotenv.config()
 
-mdb
-  .connect(process.env.MONGODB_URI)
-  .then(() => console.log("MongoDB Connection Successful"))
-  .catch((err) => console.log("MongoDB Connection Unsuccessful", err));
+// Temporary in-memory storage for testing
+let users = [];
+let auctions = [];
+
+// Comment out MongoDB connection temporarily
+// mdb
+//   .connect(process.env.MONGODB_URI)
+//   .then(() => console.log("MongoDB Connection Successful"))
+//   .catch((err) => console.log("MongoDB Connection Unsuccessful", err));
+
+console.log("Using in-memory storage for testing");
 
 app.get("/", (req, res) => {
   res.send("Auction Server started successfully");
 });
 
 const verifyToken = (req,res,next) =>{
-  const token = req.headers.authorization
-  if(!token){
-    res.send("Request Denied")
+  const authHeader = req.headers.authorization
+  if(!authHeader){
+    return res.status(401).send("Request Denied - No Token")
   }
+  
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader
+  
   try{
     const payload = jwt.verify(token, process.env.SECRET_KEY)
     req.username = payload.username
@@ -34,6 +44,7 @@ const verifyToken = (req,res,next) =>{
   }
   catch(err){
     console.log(err);
+    return res.status(401).send("Invalid Token")
   }
 }
 
@@ -43,22 +54,22 @@ app.post("/signup", async (req, res) => {
     const { email, username, password, role, userType } = req.body;
     
     // Check if user already exists
-    const existingUser = await Signup.findOne({ email: email });
+    const existingUser = users.find(u => u.email === email);
     if (existingUser) {
       return res.status(400).json({ "message": "User already exists", "isSignup": false });
     }
     
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newSignup = new Signup({
+    const newUser = {
       email: email,
       username: username,
       password: hashedPassword,
       role: role || 'user',
       userType: userType || 'buyer'
-    });
+    };
     
-    await newSignup.save();
-    console.log('User created successfully:', newSignup.email);
+    users.push(newUser);
+    console.log('User created successfully:', newUser.email);
     res.status(200).json({ "message": "Signup Successful", "isSignup": true });
   } catch (error) {
     console.error('Signup error:', error);
@@ -69,7 +80,7 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const existingUser = await Signup.findOne({ email: email });
+    const existingUser = users.find(u => u.email === email);
 
     if (existingUser) {
       const payload = {
@@ -122,16 +133,20 @@ app.post('/create-auction', verifyToken, async (req, res) => {
     const { title, description, startingPrice, duration } = req.body;
     const endTime = new Date(Date.now() + duration * 60 * 60 * 1000);
     
-    const newAuction = new Auction({
+    const newAuction = {
+      id: Date.now().toString(),
       title,
       description,
-      startingPrice,
-      currentPrice: startingPrice,
+      startingPrice: parseFloat(startingPrice),
+      currentPrice: parseFloat(startingPrice),
       seller: req.username,
-      endTime
-    });
+      endTime,
+      status: 'active',
+      bids: [],
+      createdAt: new Date()
+    };
     
-    await newAuction.save();
+    auctions.push(newAuction);
     res.status(201).json({ message: 'Auction created successfully', auction: newAuction });
   } catch (error) {
     res.status(500).json({ message: 'Error creating auction', error });
@@ -140,8 +155,9 @@ app.post('/create-auction', verifyToken, async (req, res) => {
 
 app.get('/auctions', async (req, res) => {
   try {
-    const auctions = await Auction.find({ status: 'active' }).sort({ createdAt: -1 });
-    res.json(auctions);
+    const activeAuctions = auctions.filter(auction => auction.status === 'active')
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    res.json(activeAuctions);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching auctions', error });
   }
@@ -150,20 +166,19 @@ app.get('/auctions', async (req, res) => {
 app.post('/place-bid', verifyToken, async (req, res) => {
   try {
     const { auctionId, bidAmount } = req.body;
-    const auction = await Auction.findById(auctionId);
+    const auction = auctions.find(a => a.id === auctionId);
     
     if (!auction || auction.status !== 'active') {
       return res.status(400).json({ message: 'Auction not available' });
     }
     
-    if (bidAmount <= auction.currentPrice) {
+    if (parseFloat(bidAmount) <= auction.currentPrice) {
       return res.status(400).json({ message: 'Bid must be higher than current price' });
     }
     
-    auction.bids.push({ bidder: req.username, amount: bidAmount });
-    auction.currentPrice = bidAmount;
+    auction.bids.push({ bidder: req.username, amount: parseFloat(bidAmount), timestamp: new Date() });
+    auction.currentPrice = parseFloat(bidAmount);
     
-    await auction.save();
     res.json({ message: 'Bid placed successfully', auction });
   } catch (error) {
     res.status(500).json({ message: 'Error placing bid', error });
@@ -172,7 +187,7 @@ app.post('/place-bid', verifyToken, async (req, res) => {
 
 app.post('/complete-auction/:id', verifyToken, async (req, res) => {
   try {
-    const auction = await Auction.findById(req.params.id);
+    const auction = auctions.find(a => a.id === req.params.id);
     
     if (!auction) {
       return res.status(404).json({ message: 'Auction not found' });
@@ -183,7 +198,6 @@ app.post('/complete-auction/:id', verifyToken, async (req, res) => {
     auction.status = 'sold';
     auction.winner = highestBid ? highestBid.bidder : null;
     
-    await auction.save();
     res.json({ message: 'Auction completed', auction });
   } catch (error) {
     res.status(500).json({ message: 'Error completing auction', error });
@@ -192,16 +206,17 @@ app.post('/complete-auction/:id', verifyToken, async (req, res) => {
 
 app.get('/my-bids', verifyToken, async (req, res) => {
   try {
-    const auctions = await Auction.find({ 'bids.bidder': req.username });
-    res.json(auctions);
+    const userBidAuctions = auctions.filter(auction => 
+      auction.bids.some(bid => bid.bidder === req.username)
+    );
+    res.json(userBidAuctions);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching bids', error });
   }
 });
 
 app.get('/getallsignup',async(req,res)=>{
-  const signup = await Signup.find();
-  res.json(signup);
+  res.json(users);
 })
 
 app.listen(PORT, () => {

@@ -22,7 +22,7 @@ const SellerForm = ({ onAuctionCreated }) => {
         startingPrice: parseFloat(formData.startingPrice),
         duration: parseInt(formData.duration)
       }, {
-        headers: { Authorization: token }
+        headers: { Authorization: `Bearer ${token}` }
       });
       
       alert('Auction created successfully!');
