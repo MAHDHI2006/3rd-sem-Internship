@@ -1,5 +1,5 @@
 const express = require("express");
-const mdb = require("mongoose");
+const connectDB = require("./config/db");
 const Signup = require("./models/SignupSchema");
 const Auction = require("./models/AuctionSchema");
 const bcrypt = require("bcrypt");
@@ -13,17 +13,8 @@ app.use(express.json());
 app.use(cors())
 dotenv.config()
 
-// Temporary in-memory storage for testing
-let users = [];
-let auctions = [];
-
-// Comment out MongoDB connection temporarily
-// mdb
-//   .connect(process.env.MONGODB_URI)
-//   .then(() => console.log("MongoDB Connection Successful"))
-//   .catch((err) => console.log("MongoDB Connection Unsuccessful", err));
-
-console.log("Using in-memory storage for testing");
+// Connect to MongoDB
+connectDB();
 
 app.get("/", (req, res) => {
   res.send("Auction Server started successfully");
@@ -50,29 +41,25 @@ const verifyToken = (req,res,next) =>{
 
 app.post("/signup", async (req, res) => {
   try {
-    console.log('Signup request received:', req.body);
     const { email, username, password, role, userType } = req.body;
     
-    // Check if user already exists
-    const existingUser = users.find(u => u.email === email);
+    const existingUser = await Signup.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ "message": "User already exists", "isSignup": false });
     }
     
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = {
-      email: email,
-      username: username,
+    const newUser = new Signup({
+      email,
+      username,
       password: hashedPassword,
       role: role || 'user',
       userType: userType || 'buyer'
-    };
+    });
     
-    users.push(newUser);
-    console.log('User created successfully:', newUser.email);
+    await newUser.save();
     res.status(200).json({ "message": "Signup Successful", "isSignup": true });
   } catch (error) {
-    console.error('Signup error:', error);
     res.status(500).json({ "message": "Signup failed: " + error.message, "isSignup": false });
   }
 });
@@ -80,26 +67,23 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const existingUser = users.find(u => u.email === email);
+    const existingUser = await Signup.findOne({ email });
 
     if (existingUser) {
       const payload = {
-        email:existingUser.email,
-        username:existingUser.username,
-        role:existingUser.role,
-        userType:existingUser.userType
+        email: existingUser.email,
+        username: existingUser.username,
+        role: existingUser.role,
+        userType: existingUser.userType
       }
-      const isValidPassword = await bcrypt.compare(
-        password,
-        existingUser.password
-      );
+      const isValidPassword = await bcrypt.compare(password, existingUser.password);
 
       if (isValidPassword) {
-        const token = jwt.sign(payload,process.env.SECRET_KEY)
+        const token = jwt.sign(payload, process.env.SECRET_KEY)
         res.status(200).json({
           message: "Login Successful",
           isLoggedIn: true,
-          token:token,
+          token: token,
           user: {
             username: existingUser.username,
             email: existingUser.email,
@@ -133,8 +117,7 @@ app.post('/create-auction', verifyToken, async (req, res) => {
     const { title, description, startingPrice, duration } = req.body;
     const endTime = new Date(Date.now() + duration * 60 * 60 * 1000);
     
-    const newAuction = {
-      id: Date.now().toString(),
+    const newAuction = new Auction({
       title,
       description,
       startingPrice: parseFloat(startingPrice),
@@ -142,11 +125,10 @@ app.post('/create-auction', verifyToken, async (req, res) => {
       seller: req.username,
       endTime,
       status: 'active',
-      bids: [],
-      createdAt: new Date()
-    };
+      bids: []
+    });
     
-    auctions.push(newAuction);
+    await newAuction.save();
     res.status(201).json({ message: 'Auction created successfully', auction: newAuction });
   } catch (error) {
     res.status(500).json({ message: 'Error creating auction', error });
@@ -155,8 +137,8 @@ app.post('/create-auction', verifyToken, async (req, res) => {
 
 app.get('/auctions', async (req, res) => {
   try {
-    const activeAuctions = auctions.filter(auction => auction.status === 'active')
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const activeAuctions = await Auction.find({ status: 'active' })
+      .sort({ createdAt: -1 });
     res.json(activeAuctions);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching auctions', error });
@@ -166,7 +148,7 @@ app.get('/auctions', async (req, res) => {
 app.post('/place-bid', verifyToken, async (req, res) => {
   try {
     const { auctionId, bidAmount } = req.body;
-    const auction = auctions.find(a => a.id === auctionId);
+    const auction = await Auction.findById(auctionId);
     
     if (!auction || auction.status !== 'active') {
       return res.status(400).json({ message: 'Auction not available' });
@@ -179,6 +161,7 @@ app.post('/place-bid', verifyToken, async (req, res) => {
     auction.bids.push({ bidder: req.username, amount: parseFloat(bidAmount), timestamp: new Date() });
     auction.currentPrice = parseFloat(bidAmount);
     
+    await auction.save();
     res.json({ message: 'Bid placed successfully', auction });
   } catch (error) {
     res.status(500).json({ message: 'Error placing bid', error });
@@ -187,7 +170,7 @@ app.post('/place-bid', verifyToken, async (req, res) => {
 
 app.post('/complete-auction/:id', verifyToken, async (req, res) => {
   try {
-    const auction = auctions.find(a => a.id === req.params.id);
+    const auction = await Auction.findById(req.params.id);
     
     if (!auction) {
       return res.status(404).json({ message: 'Auction not found' });
@@ -198,6 +181,7 @@ app.post('/complete-auction/:id', verifyToken, async (req, res) => {
     auction.status = 'sold';
     auction.winner = highestBid ? highestBid.bidder : null;
     
+    await auction.save();
     res.json({ message: 'Auction completed', auction });
   } catch (error) {
     res.status(500).json({ message: 'Error completing auction', error });
@@ -206,17 +190,22 @@ app.post('/complete-auction/:id', verifyToken, async (req, res) => {
 
 app.get('/my-bids', verifyToken, async (req, res) => {
   try {
-    const userBidAuctions = auctions.filter(auction => 
-      auction.bids.some(bid => bid.bidder === req.username)
-    );
+    const userBidAuctions = await Auction.find({
+      'bids.bidder': req.username
+    });
     res.json(userBidAuctions);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching bids', error });
   }
 });
 
-app.get('/getallsignup',async(req,res)=>{
-  res.json(users);
+app.get('/getallsignup', async(req, res) => {
+  try {
+    const users = await Signup.find({}, { password: 0 });
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching users', error });
+  }
 })
 
 app.listen(PORT, () => {
