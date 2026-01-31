@@ -1,0 +1,374 @@
+.App {
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app-header {
+  width: 100%;
+  background: #2c3e50;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+main {
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.auth-form h2 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.auth-form input, .auth-form select {
+  width: 100%;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #333;
+  background: white;
+  box-sizing: border-box;
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 1rem;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-size: 16px;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+main p {
+  text-align: center;
+  margin-top: 1rem;
+  color: #333;
+}
+
+main p button {
+  background: none;
+  border: none;
+  color: #3498db;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 16px;
+  margin-left: 0.5rem;
+}
+
+.dashboard {
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  color: #333;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.action-buttons button {
+  padding: 1rem 2rem;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.seller-form {
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.seller-form h2 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.seller-form input, .seller-form textarea, .seller-form select {
+  width: 100%;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+  background: white;
+  box-sizing: border-box;
+}
+
+.seller-form textarea {
+  min-height: 100px;
+}
+
+.seller-form button {
+  width: 100%;
+  padding: 1rem;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-size: 16px;
+}
+
+.auction-list {
+  width: 100%;
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.auction-list h2 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.auction-card {
+  width: 100%;
+  background: white;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  color: #333;
+  box-sizing: border-box;
+}
+
+.auction-card h3 {
+  color: #2c3e50;
+  text-align: center;
+}
+
+.auction-details {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.bid-section {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.bid-section input {
+  flex: 1;
+  max-width: 300px;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+  background: white;
+}
+
+.bid-section button {
+  padding: 0.75rem 1.5rem;
+  background: #e67e22;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.payment-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.payment-container h2 {
+  color: #2c3e50;
+  text-align: center;
+}
+
+.payment-card {
+  background: white;
+  padding: 2rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  color: #333;
+}
+
+.payment-card h3 {
+  color: #2c3e50;
+  text-align: center;
+}
+
+.payment-form {
+  text-align: center;
+}
+
+.payment-form h4 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.payment-form input {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.75rem;
+  margin: 0.5rem auto;
+  display: block;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+  background: white;
+  box-sizing: border-box;
+}
+
+.payment-form button {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.75rem;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 1rem auto;
+  display: block;
+}
+
+.admin-dashboard {
+  width: 100%;
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.admin-dashboard h2 {
+  color: #2c3e50;
+  text-align: center;
+}
+
+.admin-section {
+  background: white;
+  padding: 2rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  color: #333;
+}
+
+.admin-section h3 {
+  color: #2c3e50;
+  text-align: center;
+}
+
+.auctions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.admin-auction-card {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 4px;
+  background: #f9f9f9;
+  color: #333;
+  text-align: center;
+}
+
+.admin-auction-card h4 {
+  color: #2c3e50;
+}
+
+.admin-auction-card button {
+  padding: 0.5rem 1rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stats p {
+  background: #ecf0f1;
+  padding: 1rem;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: bold;
+  color: #2c3e50;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
