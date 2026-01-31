@@ -55,7 +55,7 @@ const AuctionList = () => {
         <p>No active auctions found.</p>
       ) : (
         auctions.map(auction => (
-          <div key={auction.id} className="auction-card">
+          <div key={auction._id} className="auction-card">
             <h3>{auction.title}</h3>
             <p>{auction.description}</p>
             <div className="auction-details">
@@ -69,12 +69,12 @@ const AuctionList = () => {
               <input
                 type="number"
                 placeholder="Enter bid amount"
-                value={bidAmounts[auction.id] || ''}
-                onChange={(e) => setBidAmounts({...bidAmounts, [auction.id]: e.target.value})}
+                value={bidAmounts[auction._id] || ''}
+                onChange={(e) => setBidAmounts({...bidAmounts, [auction._id]: e.target.value})}
                 min={auction.currentPrice + 0.01}
                 step="0.01"
               />
-              <button onClick={() => placeBid(auction.id)}>
+              <button onClick={() => placeBid(auction._id)}>
                 Place Bid
               </button>
             </div>
